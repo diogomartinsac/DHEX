@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="borg_workbench">
+  <link name ="world">
+  </link>
+
+    <xacro:include filename="$(find borg_arm_description)/urdf/borg_arm.urdf.xacro"/>
+    <xacro:include filename="$(find borg_arm_description)/urdf/borg_camera.urdf.xacro"/>
+    <xacro:include filename="$(find borg_arm_gazebo)/urdf/workbench.urdf.xacro"/>
+    <xacro:include filename="$(find borg_arm_gazebo)/urdf/arm_workspace.urdf.xacro"/>
+
+    <!-- <xacro:include filename="$(find borg_arm_gazebo)/urdf/box.urdf.xacro"/> -->
+
+    <joint name="workbench_TO_world" type="fixed">
+      <parent link="world"/>
+      <child link="workbench"/>
+      <origin rpy="0 0 0" xyz="0.0 0.0 -0.10"/>
+    </joint>
+
+    <joint name ="borg_arm_TO_workbench" type="fixed">
+        <origin rpy="0 0 1.5707" xyz="0 -0.58 1.39"/>
+        <parent link="workbench"/>
+        <child link = "${base_link}"/>
+    </joint>
+    <!-- <joint name ="box_TO_workbench" type="fixed">
+        <origin rpy="0 0 0" xyz="0 0.5 0.895"/>
+        <parent link="workbench"/>
+        <child link = "box_base_link"/>
+    </joint> -->
+    <joint name ="arm_workspace_TO_workbench" type="fixed">
+        <origin rpy="0 0 0" xyz="0 -0.58 1.39"/>
+        <parent link="workbench"/>
+        <child link = "arm_workspace"/>
+    </joint>
+
+</robot>

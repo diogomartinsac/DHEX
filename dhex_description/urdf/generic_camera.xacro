@@ -1,0 +1,131 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="generic_camera">
+
+  <xacro:property name="M_PI" value="3.1415926535897931" />
+  <xacro:property name="camera_size" value="0.05" />
+
+  <xacro:macro name="generic_camera"
+               params="parent:=base_link
+                       name:=camera
+                       topic:=/camera
+                       hz:=30
+                       fov:=${M_PI/2.0}
+                       px_width:=1280
+                       px_heigth:=720
+                       px_format:=R8G8B8
+                       clip_near:=0.02
+                       clip_far:=300
+                       noise:=0.008
+                       hackbaseline:=0.0
+                       cxprime:=0
+                       cx:=0
+                       cy:=0
+                       f:=0
+                       k1:=0.0
+                       k2:=0.0
+                       k3:=0.0
+                       t1:=0.0
+                       t2:=0.0
+                       origin_rpy_i
+                       origin_xyz_i
+                       meshfile
+                       meshscale
+                       mass
+                       ixx ixy ixz
+                       iyy iyz izz
+                       origin_xyz_j
+                       origin_rpy_j
+                       ">
+
+
+    <link name="${name}">
+      <inertial>
+        <mass value="${mass}" />
+        <origin rpy="${origin_rpy_i}" xyz="${origin_xyz_i}" />
+        <inertia ixx="${ixx}" ixy="${ixy}" ixz="${ixz}" iyy="${iyy}" iyz="${iyz}" izz="${izz}" />
+      </inertial>
+      <collision>
+        <origin rpy="0 0 0" xyz="0 0 0" />
+        <geometry>
+          <mesh filename="${meshfile}" scale="${meshscale}"/>
+        </geometry>
+      </collision>
+      <visual>
+        <origin rpy="0 0 0" xyz="0 0 0" />
+        <geometry>
+          <mesh filename="${meshfile}" scale="${meshscale}"/>
+        </geometry>
+        <material name="light_black"/>
+      </visual>
+    </link>
+
+    <link name="${name}_optical_frame"/>
+
+    <joint name="${parent}_TO_${name}" type="fixed">
+      <origin xyz="${origin_xyz_j}" rpy="${origin_rpy_j}"/>
+      <parent link="${parent}"/>
+      <child link="${name}"/>
+      <axis xyz="0.0 0.0 0.0"/>
+      <limit lower="0.0" upper="0.0" effort="0.0" velocity="0.0"/>
+    </joint>
+
+    <joint name="${name}__TO__${name}_optical_frame" type="fixed">
+      <origin xyz="0.0 0.0 0.0" rpy="-1.5707 0.0 -1.5707"/>
+      <parent link="${name}"/>
+      <child link="${name}_optical_frame"/>
+    </joint>
+
+
+
+    <gazebo reference="${name}">
+      <material>Gazebo/Red</material>
+    </gazebo>
+
+
+    <gazebo reference="${name}">
+      <sensor type="camera" name="${name}_sensor">
+        <update_rate>${hz}</update_rate>
+        <camera name="${name}">
+          <horizontal_fov>${fov}</horizontal_fov>
+          <image>
+            <width>${px_width}</width>
+            <height>${px_heigth}</height>
+            <format>${px_format}</format>
+          </image>
+          <clip>
+            <near>${clip_near}</near>
+            <far>${clip_far}</far>
+          </clip>
+          <noise>
+            <type>gaussian</type>
+            <mean>0.0</mean>
+            <stddev>${noise}</stddev>
+          </noise>
+        </camera>
+        <plugin name="camera_controller" filename="libgazebo_ros_camera.so">
+          <alwaysOn>true</alwaysOn>
+          <updateRate>${hz}</updateRate>
+          <cameraName>${name}</cameraName>
+          <imageTopicName>image_raw</imageTopicName>
+          <cameraInfoTopicName>camera_info</cameraInfoTopicName>
+          <frameName>${name}_optical_frame</frameName>
+          <hackBaseline>${hackbaseline}</hackBaseline>
+          <!-- <CxPrime>${cxprime}</CxPrime> -->
+          <Cx>${cx}</Cx>
+          <Cy>${cy}</Cy>
+          <!-- <focalLengthX>${fx}</focalLengthX>
+          <focalLengthY>${fy}</focalLengthY> -->
+          <focalLength>${f}</focalLength>
+          <distortionK1>${k1}</distortionK1>
+          <distortionK2>${k2}</distortionK2>
+          <distortionK3>${k3}</distortionK3>
+          <distortionT1>${t1}</distortionT1>
+          <distortionT2>${t2}</distortionT2>
+        </plugin>
+      </sensor>
+    </gazebo>
+
+  </xacro:macro>
+
+
+</robot>

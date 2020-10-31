@@ -1,0 +1,50 @@
+<?xml version="1.0" ?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+  <xacro:macro name="m_joint" params="name type axis_xyz origin_rpy origin_xyz parent child limit_e limit_l limit_u limit_v">
+    <joint name="${name}" type="${type}">
+      <axis xyz="${axis_xyz}" />
+      <limit effort="${limit_e}" lower="${limit_l}" upper="${limit_u}" velocity="${limit_v}" />
+      <origin rpy="${origin_rpy}" xyz="${origin_xyz}" />
+      <parent link="${parent}" />
+      <child link="${child}" />
+    </joint>
+  <xacro:property name="joint_type" value="revolute"/>
+  <xacro:if value="${joint_type == type}">
+    <transmission name="trans_${name}">
+      <type>transmission_interface/SimpleTransmission</type>
+      <joint name="${name}">
+        <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+      </joint>
+      <actuator name="motor_${name}">
+        <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+        <mechanicalReduction>1</mechanicalReduction>
+      </actuator>
+    </transmission>
+  </xacro:if>
+  </xacro:macro>
+
+  <xacro:macro name="m_link_mesh" params="name origin_xyz_c origin_rpy_c origin_rpy_v origin_xyz_v origin_rpy_i origin_xyz_i meshfile meshscale mass ixx ixy ixz iyy iyz izz">
+    <link name="${name}">
+      <inertial>
+        <mass value="${mass}" />
+        <origin rpy="${origin_rpy_i}" xyz="${origin_xyz_i}" />
+        <inertia ixx="${ixx}" ixy="${ixy}" ixz="${ixz}" iyy="${iyy}" iyz="${iyz}" izz="${izz}" />
+      </inertial>
+      <collision>
+        <origin rpy="${origin_rpy_c}" xyz="${origin_xyz_c}" />
+        <geometry>
+          <mesh filename="${meshfile}" scale="${meshscale}"/>
+        </geometry>
+      </collision>
+      <visual>
+        <origin rpy="${origin_rpy_v}" xyz="${origin_xyz_v}" />
+        <geometry>
+          <mesh filename="${meshfile}" scale="${meshscale}"/>
+        </geometry>
+        <material name="light_black"/>
+      </visual>
+    </link>
+  </xacro:macro>
+
+</robot>
