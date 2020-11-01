@@ -1,17 +1,9 @@
 <?xml version="1.0" ?>
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro">
-  <xacro:property name="base_link" value="dhex_base_link" />
-  <xacro:property name="link_00_name" value="M1" />
-  <xacro:property name="link_01_name" value="LINK0" />
-  <xacro:property name="link_02_name" value="M2" />
-  <xacro:property name="link_03_name" value="LINK1" />
-  <xacro:property name="link_04_name" value="M3" />
-  <xacro:property name="link_05_name" value="M4" />
-  <xacro:property name="link_06_name" value="LINK2" />
-  <xacro:property name="link_07_name" value="M5" />
-  <xacro:property name="link_08_name" value="LINK3" />
-  <xacro:property name="link_09_name" value="M6" />  
-  <xacro:property name="link_10_name" value="LINK4" />
-  <xacro:property name="camera_holder" value="CAMERA_HOLDER" />  
-  <xacro:property name="link_11_name" value="eef" />
+  <xacro:property name="base_link" value="base_link" />
+  <xacro:property name="link_00_name" value="dhex_base_link" />
+  <xacro:property name="link_01_name" value="right_wheel" />
+  <xacro:property name="link_02_name" value="left_wheel" />
+  <xacro:property name="link_03_name" value="caster_wheel_support" />
+  <xacro:property name="link_04_name" value="caster_wheel" />
 </robot>

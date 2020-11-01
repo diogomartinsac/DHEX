@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<launch>
+  <arg name="verbose"       default="false"/>
+  <arg name="pause"        default="false"/>
+  <arg name="use_sim_time"  default="true"/>
+  <arg name="gui"           default="true"/>
+  <arg name="headless"      default="false"/>
+  <arg name="debug"         default="false"/>
+  
+    <!-- Start Gazebo with a blank world -->
+    <include file="$(find dhex_gazebo)/launch/gazebo.launch">
+        <arg name="debug" value="$(arg debug)" />
+        <arg name="gui" value="$(arg gui)" />
+        <arg name="paused" value="$(arg pause)"/>
+        <arg name="use_sim_time" value="true"/>
+        <arg name="headless" value="$(arg headless)"/>
+    </include>
+
+    <node pkg="tf" type="static_transform_publisher" name="base_map" args="0 0 0 0 0 0 /odom /map 100" />
+    <!--  Include robot stuff -->
+    <include file="$(find dhex_description)/launch/spawn.launch" />
+    
+    <!-- MoveIt -->
+    <!-- <include file="$(find dhex_description)/launch/moveit.launch" /> -->
+    <!-- Spawn Box -->
+    <!-- <include file="$(find dhex_description)/launch/spawn_box.launch" /> -->
+</launch>

@@ -1,0 +1,20 @@
+joint_state_controller:
+  type: joint_state_controller/JointStateController
+  publish_rate: 50
+
+arm_controller:
+  type: position_controllers/JointTrajectoryController
+  joints:
+     - M1_TO_LINK0
+     - M2_TO_LINK1
+     - M4_TO_LINK2
+     - M5_TO_LINK3
+     - M6_TO_LINK4
+  gains:
+      M1_TO_LINK0: { p: 100, d: 1, i: 1, i_clamp: 1 }
+      M2_TO_LINK1: { p: 100, d: 1, i: 1, i_clamp: 1 }
+      M4_TO_LINK2: { p: 100, d: 1, i: 1, i_clamp: 1 }
+      M5_TO_LINK3: { p: 100, d: 1, i: 1, i_clamp: 1 }
+      M6_TO_LINK4: { p: 100, d: 1, i: 1, i_clamp: 1 }
+  
+  state_publish_rate: 25    
