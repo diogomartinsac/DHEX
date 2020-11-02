@@ -23,14 +23,14 @@
 
 <!-- HEX_BASE_LINK  -->
 <m_link_mesh name="${link_00_name}"
-        origin_rpy_i="0 0 0" origin_xyz_i="0 0 0"
+        origin_rpy_i="0 0 0" origin_xyz_i="0.00643363 -0.00003738 0.00608448"
         origin_rpy_c="0 0 0" origin_xyz_c="0 0 0"
         origin_rpy_v = "0 0 0" origin_xyz_v ="0 0 0"
         mass="0.27625906"
-        ixx="0.0002334" ixy="5.344e-7" ixz="0.00002047"
-        iyy="0.00053514" iyz="5.933e-8"
-        izz="0.00071458"
-        meshfile="package://dhex_description/meshes/hex_base_link.stl"
+        ixx="0.0003358" ixy="2.321e-6" ixz="-3.063e-5"
+        iyy="0.00073197" iyz="0.00000108"
+        izz="0.00089429"
+        meshfile="package://dhex_description/meshes/dhex_base_link.dae"
         meshscale="1 1 1" />
 
 
@@ -51,7 +51,7 @@
         ixx="0.00001354" ixy="0" ixz="0"
         iyy="0.00001354" iyz="0"
         izz="0.00002032"
-        meshfile="package://dhex_description/meshes/wheel.stl"
+        meshfile="package://dhex_description/meshes/wheel.dae"
         meshscale="1 1 1" />
 		<!-- origin_rpy_i="0 0 0" origin_xyz_i="0.04318327 -0.06196513 -0.0084928" -->
 
@@ -71,7 +71,7 @@
         ixx="0.00001354" ixy="0" ixz="0"
         iyy="0.00001354" iyz="0"
         izz="0.00002032"
-        meshfile="package://dhex_description/meshes/wheel.stl"
+        meshfile="package://dhex_description/meshes/wheel.dae"
         meshscale="1 1 1" />
 
 <!-- JOINT - HEX_BASE_LINK TO CASTER_WHEEL_SUPPORT -->
