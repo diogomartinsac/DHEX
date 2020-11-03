@@ -1,0 +1,5 @@
+<?xml version="1.0"?>
+<launch>
+    <rosparam file="$(find dhex_localization)/config/right_wheel_tachometer.yaml" command="load"/>
+    <node name="right_wheel_tachometer" pkg="dhex_localization" type="tachometer"/> 
+</launch>

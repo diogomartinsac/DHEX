@@ -1,4 +1,4 @@
 wheel_radius: 0.0325
 base_name: "base_wheel"
 wheel_name: "left_wheel"
-right_wheel: false
+right_wheel: true
