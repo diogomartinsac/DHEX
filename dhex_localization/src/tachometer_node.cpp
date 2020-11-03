@@ -2,6 +2,8 @@
 #include<dhex_localization/Tachometer.h>
 #include <std_msgs/Float64.h>
 #include <nav_msgs/Odometry.h>
+#include <geometry_msgs/Twist.h>
+#include <tf/transform_listener.h>
 
 class Parser 
 {
@@ -13,13 +15,16 @@ public:
     Parser(ros::NodeHandle nh);
 };
 
-double vr; 
-double va; 
+
+double wheel_speed_right;
+double wheel_speed_left;
 
 void odomCallback(const nav_msgs::Odometry::ConstPtr& msg)
 {
-  vr = msg ->twist.twist.linear.x;
-  va = msg ->twist.twist.angular.z;
+    double vr = msg ->twist.twist.linear.x;
+    double va = msg ->twist.twist.angular.z;
+    wheel_speed_left = (vr - va * 0.09 / 2.0) / 0.0325;
+    wheel_speed_right = (vr + va * 0.09 / 2.0) / 0.0325;
 }
 
 int main(int argc, char **argv)
@@ -34,19 +39,26 @@ int main(int argc, char **argv)
     period_publisher = nh.advertise<std_msgs::Float64>("/measurement_period",10);
     
     ros::Subscriber odom = nh.subscribe("/dhex/odom", 1, odomCallback);
-    
+    geometry_msgs::Twist objectTwist;
+    tf::TransformListener listener;
     
     Tachometer tachometer(parser.wheel_name, parser.base_name,
                           parser.wheel_radius, parser.right_wheel);
     while(ros::ok())
     { 
-        // double vr; 
-        // double va; 
+        
+        
+        // left and right wheel speeds in rads/s
 
-        // calculate the left and right wheel speeds in rads/s
-        double wheel_speed_left = (vr - va * 0.09 / 2.0) / parser.wheel_radius;
-        double wheel_speed_right = (vr + va * 0.09 / 2.0) / parser.wheel_radius;
+        try{
+            listener.lookupTwist("/base_wheel", "/right_wheel", "base_wheel", tf::Point(), "right_wheel", ros::Time(0), ros::Duration(0.1), objectTwist);
+        }
+        catch (tf::LookupException &ex) {
+            ROS_WARN("%s",ex.what());
+            ros::Duration(1.0).sleep();
+        }
 
+        std::cout<<" - Right Wheel speed: "<< objectTwist.angular.z * 0.0325 <<std::endl;
         std::cout<<"Right Wheel speed: "<< wheel_speed_right<<" Left wheel speed: " << wheel_speed_left<<std::endl;
         tachometer.computeWheelVelocity();  
         if (!std::isnan(tachometer.getWheelVelocity().data)) {
