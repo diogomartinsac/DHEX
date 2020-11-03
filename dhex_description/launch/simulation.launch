@@ -19,6 +19,7 @@
     <node pkg="tf" type="static_transform_publisher" name="base_map" args="0 0 0 0 0 0 /odom /map 100" />
     <!--  Include robot stuff -->
     <include file="$(find dhex_description)/launch/spawn.launch" />
+    <include file="$(find dhex_localization)/launch/dhex_odometry.launch" />
     
     <!-- MoveIt -->
     <!-- <include file="$(find dhex_description)/launch/moveit.launch" /> -->
