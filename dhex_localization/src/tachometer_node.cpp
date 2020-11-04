@@ -49,7 +49,6 @@ Parser::Parser(ros::NodeHandle &nh)
 
 void Parser::deleteParameters(ros::NodeHandle &nh)
 {    
-    nh.deleteParam("wheel_radius");
     nh.deleteParam("base_name");
     nh.deleteParam("wheel_name");
     nh.deleteParam("right_wheel");
