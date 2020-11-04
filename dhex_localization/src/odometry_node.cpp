@@ -76,11 +76,7 @@ int main(int argc, char **argv)
                 initial_pose_captured = true;
                 odometer = Odometer(parser.wheel_radius, parser.wheel_separation, actual_pose);
             }
-        } else {   
-            // if ((ros::Time::now() - timePrev).toSec() >= 0.05){
-                // dt = (ros::Time::now() - timePrev).toSec();
-                // timePrev = ros::Time::now();     
-                // std::cout << left_wheel_velocity<<"  " << right_wheel_velocity<< " " << dt << " "<<parser.wheel_separation<< std::endl;
+        } else {
                 if (right && left) {
                     odometer.updatePose(left_wheel_velocity, right_wheel_velocity, 1/rate);
                     odometry = odometer.getPose();
@@ -91,7 +87,6 @@ int main(int argc, char **argv)
                     right = false;
                     left = false;
                 }
-            // }
         }
         ros::spinOnce(); 
         loop_rate.sleep();

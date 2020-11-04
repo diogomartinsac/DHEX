@@ -17,7 +17,6 @@ Odometer::Odometer(
         theta = quat.getAngle();
     }
     std::cout<<"Theta INIT: "<<theta<<std::endl;
-    // do nothing
 }
 
 void Odometer::updatePose(std_msgs::Float64 &left_velocity, 
