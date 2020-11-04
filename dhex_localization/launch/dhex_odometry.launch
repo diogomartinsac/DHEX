@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
 <launch>
-    <rosparam file="$(find dhex_localization)/config/left_wheel_tachometer.yaml" command="load"/>
-    <!-- <rosparam file="$(find dhex_localization)/config/right_wheel_tachometer.yaml" command="load"/> -->
+    <include file="$(find dhex_localization)/launch/dhex_left_tachometer.launch" />
+    <include file="$(find dhex_localization)/launch/dhex_right_tachometer.launch" />
 </launch>

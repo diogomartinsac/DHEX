@@ -12,8 +12,6 @@
         <!-- <rosparam command="load" file="$(find dhex_description)/config/joints2.yaml" /> -->
         <!-- Controllers -->
 
-
-
         <!-- Robot state publisher -->
         <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher"
         respawn="false" output="screen">
