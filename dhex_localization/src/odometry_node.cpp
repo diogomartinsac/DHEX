@@ -12,6 +12,8 @@
 
 std_msgs::Float64 right_wheel_velocity, left_wheel_velocity;
 nav_msgs::Odometry actual_pose;
+bool right = false;
+bool left = false;
 
 class Parser 
 {
@@ -41,12 +43,14 @@ void odomCallback(const nav_msgs::Odometry::ConstPtr& msg)
 void rightWheelCallback(const std_msgs::Float64::ConstPtr& msg)
 {
     right_wheel_velocity = (*msg);
+    right = true;
 }
 
 
 void leftWheelCallback(const std_msgs::Float64::ConstPtr& msg)
 {
     left_wheel_velocity = (*msg);
+    left = true;
 }
 
 
@@ -72,7 +76,7 @@ int main(int argc, char **argv)
 
     while(ros::ok())
     { 
-        if ((ros::Time::now() - timePrev).toSec() >= 0.05){
+        if (((ros::Time::now() - timePrev).toSec() >= 0.05) && (right && left)){
             dt = (ros::Time::now() - timePrev).toSec();
             timePrev = ros::Time::now();     
             // std::cout << left_wheel_velocity<<"  " << right_wheel_velocity<< " " << dt << " "<<parser.wheel_separation<< std::endl;
@@ -81,6 +85,8 @@ int main(int argc, char **argv)
             odometry.header.frame_id = "odom";
             odometry.child_frame_id = "base_link";
             odom_publisher.publish(odometry);
+            right = false;
+            left = false;
         }
         ros::spinOnce(); 
         loop_rate.sleep();

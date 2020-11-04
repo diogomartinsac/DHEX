@@ -11,6 +11,7 @@ void Odometer::updatePose(std_msgs::Float64 &left_velocity,
                           std_msgs::Float64 &right_velocity,
                           double &dt)
 {
+    ros::Time current_time = ros::Time::now();
     tf2::Quaternion quat;
     tf2::fromMsg(m_pose.pose.pose.orientation, quat);
     double theta;
@@ -21,16 +22,33 @@ void Odometer::updatePose(std_msgs::Float64 &left_velocity,
     }
     double velocity = (left_velocity.data + right_velocity.data) / 2;
     double omega = (left_velocity.data - right_velocity.data) / (2 * m_length);
-    m_pose.pose.pose.position.x = m_pose.pose.pose.position.x + (velocity) * (cos(theta + omega));
-    m_pose.pose.pose.position.y = m_pose.pose.pose.position.y + (velocity) * (sin(theta + omega));
-    theta = theta + omega * (1/dt);
-    if (theta  > M_PI) {
-        theta = theta  - 2*M_PI;
-    } else if(theta  < M_PI){
-        theta = theta + 2*M_PI; 
-    }
+    double dx = (velocity) * (cos(theta + omega));
+    double dy = (velocity) * (sin(theta + omega));
+    double dtheta = omega / dt;
+    double v = sqrt ( dx*dx+dy*dy ) / dt;
+
+    theta += dtheta;
+
+    // if (theta  > M_PI) {
+    //     theta = theta  - 2*M_PI;
+    // } else if(theta  < M_PI){
+    //     theta = theta + 2*M_PI; 
+    // }
+
     quat.setRPY(0,0,theta);
-    m_pose.pose.pose.orientation = tf2::toMsg(quat);
+    m_pose.pose.pose.position.x += dx;
+    m_pose.pose.pose.position.y += dy;
+    m_pose.pose.pose.position.z = 0;
+    m_pose.pose.pose.orientation.x = quat.x();
+    m_pose.pose.pose.orientation.y = quat.y();
+    m_pose.pose.pose.orientation.z = quat.z();
+    m_pose.pose.pose.orientation.w = quat.w();
+    m_pose.twist.twist.angular.z = dtheta;
+    m_pose.twist.twist.linear.x = v;
+    m_pose.twist.twist.linear.y = 0;
+
+    m_pose.header.stamp = current_time;
+
 }
 
 nav_msgs::Odometry Odometer::getPose()

@@ -24,9 +24,9 @@ int main(int argc, char **argv)
     Tachometer tachometer(parser.wheel_name, parser.base_name,
                           parser.wheel_radius, parser.right_wheel);
     velocity_publisher = 
-        nh.advertise<std_msgs::Float64>("localization/tachometer/" + parser.wheel_name +"_velocity",10);
+        nh.advertise<std_msgs::Float64>("localization/tachometer/" + parser.wheel_name +"_velocity",1);
     parser.deleteParameters(nh);
-    ros::Rate loop_rate(10);    
+    ros::Rate loop_rate(250);    
 
     while(ros::ok())
     { 
