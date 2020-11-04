@@ -175,7 +175,7 @@ Visualization Manager:
           Value: true
         Value: false
       Enabled: true
-      Keep: 100
+      Keep: 1000
       Name: Odometry
       Position Tolerance: 0.10000000149011612
       Shape:
@@ -184,9 +184,9 @@ Visualization Manager:
         Axes Radius: 0.10000000149011612
         Color: 138; 226; 52
         Head Length: 0.029999999329447746
-        Head Radius: 0.009999999776482582
-        Shaft Length: 0.10000000149011612
-        Shaft Radius: 0.0010000000474974513
+        Head Radius: 0.019999999552965164
+        Shaft Length: 0.05000000074505806
+        Shaft Radius: 0.009999999776482582
         Value: Arrow
       Topic: /dhex/ground_truth/state
       Unreliable: false
@@ -209,7 +209,7 @@ Visualization Manager:
           Value: true
         Value: false
       Enabled: true
-      Keep: 100
+      Keep: 1000
       Name: Odometry
       Position Tolerance: 0.10000000149011612
       Shape:
@@ -218,9 +218,9 @@ Visualization Manager:
         Axes Radius: 0.10000000149011612
         Color: 255; 25; 0
         Head Length: 0.029999999329447746
-        Head Radius: 0.009999999776482582
-        Shaft Length: 0.10000000149011612
-        Shaft Radius: 0.0010000000474974513
+        Head Radius: 0.019999999552965164
+        Shaft Length: 0.05000000074505806
+        Shaft Radius: 0.009999999776482582
         Value: Arrow
       Topic: /localization/odometry
       Unreliable: false
@@ -253,25 +253,25 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz/Orbit
-      Distance: 4.85159969329834
+      Distance: 6.039952278137207
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
         Stereo Focal Distance: 1
         Swap Stereo Eyes: false
         Value: false
       Focal Point:
-        X: -0.2285822182893753
-        Y: 1.6628811359405518
-        Z: 0.19285060465335846
+        X: 2.3467934131622314
+        Y: 2.597508430480957
+        Z: -1.1908077001571655
       Focal Shape Fixed Size: true
       Focal Shape Size: 0.05000000074505806
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Pitch: 1.2303980588912964
+      Pitch: 0.7047972083091736
       Target Frame: <Fixed Frame>
       Value: Orbit (rviz)
-      Yaw: 0.00849137268960476
+      Yaw: 0.4634897708892822
     Saved: ~
 Window Geometry:
   Displays:
