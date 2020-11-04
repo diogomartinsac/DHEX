@@ -1,5 +1,5 @@
-wheel_separation: 0.09
-wheel_radius: 0.0325
+wheel_separation: 0.1275
+wheel_radius: 0.032998745
 base_name: "base_wheel"
 wheel_name: "left_wheel"
 right_wheel: true

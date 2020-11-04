@@ -15,11 +15,13 @@ private:
     double m_radius, m_length;
 
 public:
-    Odometer(const double &radius, const double &length, const nav_msgs::Odometry &pose);
+    Odometer();
+
+    Odometer(const double radius, const double length, const nav_msgs::Odometry pose);
  
     void updatePose(std_msgs::Float64 &left_velocity, 
                     std_msgs::Float64 &right_velocity,
-                    double &dt);
+                    const double dt);
 
     nav_msgs::Odometry getPose();
 };

@@ -1,54 +1,52 @@
 #include <dhex_localization/Odometer.h>
 
+Odometer::Odometer(){}
+
 Odometer::Odometer(
-    const double &radius, const double &length, const nav_msgs::Odometry &pose) :
+    const double radius, const double length, const nav_msgs::Odometry pose) :
     m_radius(radius), m_length(length), m_pose(pose)
 {
-    // do nothing
-}
-
-void Odometer::updatePose(std_msgs::Float64 &left_velocity, 
-                          std_msgs::Float64 &right_velocity,
-                          double &dt)
-{
-    ros::Time current_time = ros::Time::now();
     tf2::Quaternion quat;
-    tf2::fromMsg(m_pose.pose.pose.orientation, quat);
+    std::cout<<"Quat INIT: "<<m_pose.pose.pose.orientation<<std::endl;
+    tf2::convert(m_pose.pose.pose.orientation, quat);
+    quat.normalize();
     double theta;
     if (quat.getAngle() > M_PI) {
         theta = quat.getAngle() - 2*M_PI;
     } else {
         theta = quat.getAngle();
     }
-    double velocity = (left_velocity.data + right_velocity.data) / 2;
-    double omega = (left_velocity.data - right_velocity.data) / (2 * m_length);
-    double dx = (velocity) * (cos(theta + omega));
-    double dy = (velocity) * (sin(theta + omega));
-    double dtheta = omega / dt;
-    double v = sqrt ( dx*dx+dy*dy ) / dt;
+    std::cout<<"Theta INIT: "<<theta<<std::endl;
+    // do nothing
+}
 
-    theta += dtheta;
+void Odometer::updatePose(std_msgs::Float64 &left_velocity, 
+                          std_msgs::Float64 &right_velocity,
+                          const double dt)
+{
+    tf2::Quaternion quat;
+    std::cout<<"Quat b4: "<<m_pose.pose.pose.orientation<<std::endl;
+    tf2::convert(m_pose.pose.pose.orientation, quat);
+    quat.normalize();
+    double theta = quat.getAngle();
+    std::cout<<"Theta b4: "<<theta<<std::endl;
+    double velocity = dt * (left_velocity.data + right_velocity.data) / 2.;
+    std::cout<<"Radius: "<<m_radius<<"  Length: "<<m_length<<std::endl;
 
-    // if (theta  > M_PI) {
-    //     theta = theta  - 2*M_PI;
-    // } else if(theta  < M_PI){
-    //     theta = theta + 2*M_PI; 
-    // }
-
+    double omega = (dt * (right_velocity.data - left_velocity.data) / ((m_length)));
+    m_pose.pose.pose.position.x += (velocity) * (cos(theta + omega/2.));
+    m_pose.pose.pose.position.y += (velocity) * (sin(theta + omega/2.));
+    theta+=omega;
+    if (theta  > 2 * M_PI) {
+        theta = theta  - 2*M_PI;
+    } else if (theta  < 0){
+        theta = theta + 2*M_PI; 
+    }
+    std::cout<<"Omega: "<<omega<<std::endl;
+    std::cout<<"Theta after: "<<theta<<std::endl;
     quat.setRPY(0,0,theta);
-    m_pose.pose.pose.position.x += dx;
-    m_pose.pose.pose.position.y += dy;
-    m_pose.pose.pose.position.z = 0;
-    m_pose.pose.pose.orientation.x = quat.x();
-    m_pose.pose.pose.orientation.y = quat.y();
-    m_pose.pose.pose.orientation.z = quat.z();
-    m_pose.pose.pose.orientation.w = quat.w();
-    m_pose.twist.twist.angular.z = dtheta;
-    m_pose.twist.twist.linear.x = v;
-    m_pose.twist.twist.linear.y = 0;
-
-    m_pose.header.stamp = current_time;
-
+    quat.normalize();
+    m_pose.pose.pose.orientation = tf2::toMsg(quat);
 }
 
 nav_msgs::Odometry Odometer::getPose()

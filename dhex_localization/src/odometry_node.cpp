@@ -8,6 +8,7 @@
 #include <geometry_msgs/Quaternion.h>
 #include <tf2/LinearMath/Quaternion.h>
 #include <tf2_geometry_msgs/tf2_geometry_msgs.h>
+#include <tf2_ros/transform_listener.h>
 #include "ros/time.h"
 
 std_msgs::Float64 right_wheel_velocity, left_wheel_velocity;
@@ -28,16 +29,6 @@ public:
 void odomCallback(const nav_msgs::Odometry::ConstPtr& msg)
 {
     actual_pose = (*msg);
-    
-    // actual_pose.x = msg ->pose.pose.position.x;
-    // actual_pose.y = msg ->pose.pose.position.y;
-    // tf2::Quaternion quat;
-    // tf2::fromMsg(msg ->pose.pose.orientation, quat);
-    // if (quat.getAngle() > M_PI) {
-    //     actual_pose.theta = quat.getAngle() - 2*M_PI;
-    // } else {
-    //     actual_pose.theta = quat.getAngle();
-    // }
 }
 
 void rightWheelCallback(const std_msgs::Float64::ConstPtr& msg)
@@ -56,37 +47,51 @@ void leftWheelCallback(const std_msgs::Float64::ConstPtr& msg)
 
 int main(int argc, char **argv)
 {
+    bool initial_pose_captured = false;
     ros::init(argc, argv, "odometry");    
     ros::NodeHandle nh;
-    ros::Rate loop_rate(250);    
+    double rate = 5;
+    ros::Rate loop_rate(rate);    
     Parser parser(nh);
-    ros::Publisher odom_publisher = nh.advertise<nav_msgs::Odometry>("/localization/odometry",10);
+    ros::Publisher odom_publisher = nh.advertise<nav_msgs::Odometry>("/localization/odometry",1);
     ros::Subscriber odom = nh.subscribe("/dhex/odom", 1, odomCallback);
     ros::Subscriber right_wheel_sub = nh.subscribe("/localization/tachometer/right_wheel_velocity", 1, rightWheelCallback);
     ros::Subscriber left_wheel_sub = nh.subscribe("/localization/tachometer/left_wheel_velocity", 1, leftWheelCallback);
     nav_msgs::Odometry odometry;
-
+    Odometer odometer;
     ros::Time timeNow(0), timePrev(0);
     timePrev = ros::Time::now();
     double dt;
-    sleep(2);
-    Odometer odometer(parser.wheel_radius, parser.wheel_separation, actual_pose);
-
-
 
     while(ros::ok())
     { 
-        if (((ros::Time::now() - timePrev).toSec() >= 0.05) && (right && left)){
-            dt = (ros::Time::now() - timePrev).toSec();
-            timePrev = ros::Time::now();     
-            // std::cout << left_wheel_velocity<<"  " << right_wheel_velocity<< " " << dt << " "<<parser.wheel_separation<< std::endl;
-            odometer.updatePose(left_wheel_velocity, right_wheel_velocity, dt);
-            odometry = odometer.getPose();
-            odometry.header.frame_id = "odom";
-            odometry.child_frame_id = "base_link";
-            odom_publisher.publish(odometry);
-            right = false;
-            left = false;
+        if (!initial_pose_captured) {
+            tf2::Quaternion quat;
+            quat[0] = actual_pose.pose.pose.orientation.x;
+            quat[1] = actual_pose.pose.pose.orientation.y;
+            quat[2] = actual_pose.pose.pose.orientation.z;
+            quat[3] = actual_pose.pose.pose.orientation.w;
+            quat.normalize();
+            if (!std::isnan(quat.getAngle())) {
+                initial_pose_captured = true;
+                odometer = Odometer(parser.wheel_radius, parser.wheel_separation, actual_pose);
+            }
+        } else {   
+            // if ((ros::Time::now() - timePrev).toSec() >= 0.05){
+                // dt = (ros::Time::now() - timePrev).toSec();
+                // timePrev = ros::Time::now();     
+                // std::cout << left_wheel_velocity<<"  " << right_wheel_velocity<< " " << dt << " "<<parser.wheel_separation<< std::endl;
+                if (right && left) {
+                    odometer.updatePose(left_wheel_velocity, right_wheel_velocity, 1/rate);
+                    odometry = odometer.getPose();
+                    odometry.header.frame_id = "odom";
+                    odometry.child_frame_id = "base_link";
+                    odometry.header.stamp = ros::Time::now();
+                    odom_publisher.publish(odometry);
+                    right = false;
+                    left = false;
+                }
+            // }
         }
         ros::spinOnce(); 
         loop_rate.sleep();

@@ -26,7 +26,7 @@ int main(int argc, char **argv)
     velocity_publisher = 
         nh.advertise<std_msgs::Float64>("localization/tachometer/" + parser.wheel_name +"_velocity",1);
     parser.deleteParameters(nh);
-    ros::Rate loop_rate(250);    
+    ros::Rate loop_rate(50);    
 
     while(ros::ok())
     { 
@@ -49,7 +49,6 @@ Parser::Parser(ros::NodeHandle &nh)
 
 void Parser::deleteParameters(ros::NodeHandle &nh)
 {    
-    nh.deleteParam("wheel_radius");
     nh.deleteParam("base_name");
     nh.deleteParam("wheel_name");
     nh.deleteParam("right_wheel");
