@@ -4,6 +4,7 @@
 
 ### Introduction
 
+This repo contains ROS packages for simulating the DHEX vehicle, it also contains .ino files for micro controller. DHEX is a differential robot, which has an encoder and IMU sensor for odometry. Additionally, it has an ESP32 for wifi connection using rosserial, for controlling the motor and for reading sensors. The robot model was made considering the mass of real parts, in order to get a simulation more realistic. Images and gifs below shows DHEX in simu and in CAD.
 
 <p align="center">
 <img width="640" height="480" src="readme_files/simulation.gif">
