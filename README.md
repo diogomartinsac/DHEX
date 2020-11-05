@@ -13,6 +13,14 @@
   <img width="640" height="480" src="/readme_files/real_robot.gif">
 </p>
 
+<p align="center">
+<img width="640" height="480" src="readme_files/onshape_1.png">
+</p>
+
+<p align="center">
+  <img width="640" height="480" src="/readme_files/onshape_2.png">
+</p>
+
 ### Simulation Video
 
 [![IMAGE ALT TEXT](http://img.youtube.com/vi/bRE_Z9Of7zs/0.jpg)](http://www.youtube.com/watch?v=bRE_Z9Of7zs "DHEX - ROS simulation")
