@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <launch>
-    <include file="$(find dhex_localization)/launch/dhex_left_tachometer.launch" />
-    <node name="odometry" pkg="dhex_localization" type="odometry"/>
-
+  <group ns="localization">
+    <include file="$(find dhex_localization)/launch/dhex_odometry.launch" />
+  </group>
 </launch>

@@ -21,9 +21,11 @@ class Parser
 public:
     double wheel_separation, wheel_radius;
     std::string base_name, wheel_name;
+    std::string sub_str_init_pose, sub_str_left_tachometer, sub_str_right_tachometer;
+    std::string pub_str_odom;
     bool right_wheel;
 
-    Parser(ros::NodeHandle nh);
+    Parser(ros::NodeHandle nh_local, ros::NodeHandle nh_global);
 };
 
 void odomCallback(const nav_msgs::Odometry::ConstPtr& msg)
@@ -37,26 +39,24 @@ void rightWheelCallback(const std_msgs::Float64::ConstPtr& msg)
     right = true;
 }
 
-
 void leftWheelCallback(const std_msgs::Float64::ConstPtr& msg)
 {
     left_wheel_velocity = (*msg);
     left = true;
 }
 
-
 int main(int argc, char **argv)
 {
     bool initial_pose_captured = false;
     ros::init(argc, argv, "odometry");    
-    ros::NodeHandle nh;
+    ros::NodeHandle nh_local("~"), nh_global("/");
     double rate = 5;
     ros::Rate loop_rate(rate);    
-    Parser parser(nh);
-    ros::Publisher odom_publisher = nh.advertise<nav_msgs::Odometry>("/localization/odometry",1);
-    ros::Subscriber odom = nh.subscribe("/dhex/odom", 1, odomCallback);
-    ros::Subscriber right_wheel_sub = nh.subscribe("/localization/tachometer/right_wheel_velocity", 1, rightWheelCallback);
-    ros::Subscriber left_wheel_sub = nh.subscribe("/localization/tachometer/left_wheel_velocity", 1, leftWheelCallback);
+    Parser parser(nh_local, nh_global);
+    ros::Publisher odom_publisher = nh_global.advertise<nav_msgs::Odometry>(parser.pub_str_odom,1);
+    ros::Subscriber odom = nh_global.subscribe(parser.sub_str_init_pose, 1, odomCallback);
+    ros::Subscriber right_wheel_sub = nh_global.subscribe(parser.sub_str_right_tachometer, 1, rightWheelCallback);
+    ros::Subscriber left_wheel_sub = nh_global.subscribe(parser.sub_str_left_tachometer, 1, leftWheelCallback);
     nav_msgs::Odometry odometry;
     Odometer odometer;
     ros::Time timeNow(0), timePrev(0);
@@ -93,11 +93,12 @@ int main(int argc, char **argv)
     }
 }
 
-Parser::Parser(ros::NodeHandle nh)
+Parser::Parser(ros::NodeHandle nh_local, ros::NodeHandle nh_global)
 {
-    nh.getParam("wheel_separation", this->wheel_separation);
-    nh.getParam("wheel_radius", this->wheel_radius);
-    nh.getParam("base_name", this->base_name);
-    nh.getParam("wheel_name", this->wheel_name);
-    nh.getParam("right_wheel", this->right_wheel);
+    nh_global.getParam("wheel_separation", this->wheel_separation);
+    nh_global.getParam("wheel_radius", this->wheel_radius);
+    nh_local.getParam("pub_topic/odom", this->pub_str_odom);
+    nh_local.getParam("sub_topic/initial_pose_topic", this->sub_str_init_pose);
+    nh_local.getParam("sub_topic/left_wheel_tachometer", this->sub_str_left_tachometer);
+    nh_local.getParam("sub_topic/right_wheel_tachometer", this->sub_str_right_tachometer);
 }

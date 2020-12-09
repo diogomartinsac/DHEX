@@ -1,0 +1,4 @@
+wheel_name: "right_wheel"
+right_wheel: false
+pub_topic:
+  wheel_velocity: "right_wheel_velocity"

@@ -9,23 +9,22 @@ class Parser
 public:
     double wheel_radius;
     std::string base_name, wheel_name;
+    std::string pub_str_wheel_velocity;
     bool right_wheel;
 
-    Parser(ros::NodeHandle &nh);
-    void deleteParameters(ros::NodeHandle &nh);
+    Parser(ros::NodeHandle nh_local, ros::NodeHandle nh_global);
 };
 
 int main(int argc, char **argv)
 {
     ros::init(argc, argv, "tachometer");    
-    ros::NodeHandle nh;    
-    Parser parser(nh);
+    ros::NodeHandle nh_local("~"), nh_global("/");    
+    Parser parser(nh_local, nh_global);
     ros::Publisher velocity_publisher;
     Tachometer tachometer(parser.wheel_name, parser.base_name,
                           parser.wheel_radius, parser.right_wheel);
     velocity_publisher = 
-        nh.advertise<std_msgs::Float64>("localization/tachometer/" + parser.wheel_name +"_velocity",1);
-    parser.deleteParameters(nh);
+        nh_global.advertise<std_msgs::Float64>(parser.pub_str_wheel_velocity,1);
     ros::Rate loop_rate(100);    
 
     while(ros::ok())
@@ -39,17 +38,11 @@ int main(int argc, char **argv)
     }
 }
 
-Parser::Parser(ros::NodeHandle &nh)
+Parser::Parser(ros::NodeHandle nh_local, ros::NodeHandle nh_global)
 {
-    nh.getParam("wheel_radius", this->wheel_radius);
-    nh.getParam("base_name", this->base_name);
-    nh.getParam("wheel_name", this->wheel_name);
-    nh.getParam("right_wheel", this->right_wheel);
-}
-
-void Parser::deleteParameters(ros::NodeHandle &nh)
-{    
-    nh.deleteParam("base_name");
-    nh.deleteParam("wheel_name");
-    nh.deleteParam("right_wheel");
+    nh_global.getParam("wheel_radius", this->wheel_radius);
+    nh_global.getParam("base_name", this->base_name);
+    nh_local.getParam("wheel_name", this->wheel_name);
+    nh_local.getParam("right_wheel", this->right_wheel);
+    nh_local.getParam("pub_topic/wheel_velocity", this->pub_str_wheel_velocity);
 }

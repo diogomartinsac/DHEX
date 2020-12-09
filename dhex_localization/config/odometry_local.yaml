@@ -1,0 +1,6 @@
+pub_topic:
+  odom: "/localization/odometry"
+sub_topic:
+  initial_pose_topic: "/dhex/odom"
+  left_wheel_tachometer: "/localization/left_wheel_velocity"
+  right_wheel_tachometer: "/localization/right_wheel_velocity"

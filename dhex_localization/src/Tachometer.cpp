@@ -30,8 +30,8 @@ void Tachometer::computeWheelVelocity()
         return;
     }
     if (m_right_wheel)
-        m_velocity.data = - m_tf_velocity.angular.z * m_radius;
-    else  m_velocity.data = m_tf_velocity.angular.z * m_radius;
+        m_velocity.data = m_tf_velocity.angular.z * m_radius;
+    else  m_velocity.data = - m_tf_velocity.angular.z * m_radius;
 }
 
 std_msgs::Float64 Tachometer::getWheelVelocity()
