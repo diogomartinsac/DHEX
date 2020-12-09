@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<launch>
+  <rosparam file="$(find dhex_localization)/config/odometry_global.yaml" command="load"/> 
+  <node name="odometry" pkg="dhex_localization" type="odometry">
+    <rosparam file="$(find dhex_localization)/config/odometry_local.yaml" command="load"/> 
+  </node>
+  <node name="right_wheel_tachometer" pkg="dhex_localization" type="tachometer">
+    <rosparam file="$(find dhex_localization)/config/right_tachometer_local.yaml" command="load"/> 
+  </node>
+  <node name="left_wheel_tachometer" pkg="dhex_localization" type="tachometer">
+    <rosparam file="$(find dhex_localization)/config/left_tachometer_local.yaml" command="load"/>
+  </node>
+</launch>

@@ -129,8 +129,8 @@
 			<updateRate>50</updateRate>
 			<leftJoint>${link_00_name}_TO_${link_02_name}</leftJoint>
 			<rightJoint>${link_00_name}_TO_${link_01_name}</rightJoint>
-			<wheelSeparation>0.09</wheelSeparation>
-			<wheelDiameter>0.064</wheelDiameter>
+			<wheelSeparation>0.1275</wheelSeparation>
+			<wheelDiameter>0.06599749</wheelDiameter>
 			<torque>20</torque>
 			<commandTopic>/dhex/cmd_vel</commandTopic>
 			<odometryTopic>/dhex/odom</odometryTopic>

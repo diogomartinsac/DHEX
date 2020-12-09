@@ -1,0 +1,6 @@
+<?xml version="1.0"?>
+<launch>
+  <group ns="localization">
+    <include file="$(find dhex_localization)/launch/dhex_odometry.launch" />
+  </group>
+</launch>

@@ -12,13 +12,13 @@
         <!-- <rosparam command="load" file="$(find dhex_description)/config/joints2.yaml" /> -->
         <!-- Controllers -->
 
-
-
         <!-- Robot state publisher -->
         <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher"
         respawn="false" output="screen">
             <!-- <remap from="/joint_states" to="/revel/joint_states" /> -->
         </node>
+
+        <node pkg="tf" type="static_transform_publisher" name="base_wheel" args="0 0 0 0 0 1.5707 /base_link /base_wheel 100" />
 
         <!-- rqt -->
         <!-- <node name="rqt_reconfigure" pkg="rqt_reconfigure" type="rqt_reconfigure" />
