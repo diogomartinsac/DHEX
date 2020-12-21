@@ -1,0 +1,4 @@
+<launch>
+    <rosparam command="load" file="$(find dhex_localization)/config/ekf.yaml" />
+    <node pkg="robot_localization" type="ekf_localization_node" name="ekf_localization" />
+</launch>

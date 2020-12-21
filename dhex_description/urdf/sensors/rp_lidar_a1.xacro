@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="laser">
+
+    <m_link_mesh name="rp_lidar_A1"
+            origin_rpy_i="0 0 0" origin_xyz_i="0.0 0.0 0.0"
+            origin_rpy_c="0 0 0" origin_xyz_c="0 0 0"
+            origin_rpy_v = "0 0 0" origin_xyz_v ="0 0 0"
+            mass="0.1686855"
+            ixx="0.00007378" ixy="-3.220e-7" ixz="-0.00002168"
+            iyy="0.00012371" iyz="0.00000116"
+            izz="0.00014423"
+            meshfile="package://dhex_description/meshes/rp-lidar-A1.dae"
+            meshscale="1 1 1" />
+
+    <gazebo reference="rp_lidar_A1">
+        <sensor type="ray" name="rp_lidar_A1">
+        <pose>0 0 0 0 0 0</pose>
+        <visualize>false</visualize>
+        <update_rate>40</update_rate>
+        <ray>
+            <scan>
+            <horizontal>
+                <samples>360</samples>
+                <resolution>1</resolution>
+                <min_angle>-3.1415</min_angle>
+                <max_angle>3.1415</max_angle>
+            </horizontal>
+            </scan>
+            <range>
+            <min>0.15</min>
+            <max>12.0</max>
+            <resolution>0.25</resolution>
+            </range>
+            <noise>
+            <type>gaussian</type>
+            <mean>0.0</mean>
+            <stddev>0.01</stddev>
+            </noise>
+        </ray>
+        <plugin name="gazebo_ros_head_hokuyo_controller" filename="libgazebo_ros_laser.so">
+            <topicName>laser_scan</topicName>
+            <frameName>rp_lidar_A1</frameName>
+        </plugin>
+        </sensor>
+    </gazebo>
+
+</robot>

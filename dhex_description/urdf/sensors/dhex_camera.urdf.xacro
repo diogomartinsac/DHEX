@@ -1,12 +1,14 @@
 <?xml version="1.0" ?>
 
-<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="hex_camera">
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="dhex_camera">
 
   <!-- BGN - Include -->
-  <xacro:include filename="$(find dhex_description)/urdf/generic_camera.xacro" />
+  <xacro:include filename="$(find dhex_description)/urdf/sensors/generic_camera.xacro" />
   <!-- END - Include -->
 
-<generic_camera name="hex_camera"
+<link name="base_link"/>
+
+<generic_camera name="dhex_camera"
         origin_rpy_i="0 0 0" origin_xyz_i="-0.08296871 0.00060854 0.00007174"
         mass="0.07334031"
         ixx="1.67118895e-5" ixy="6.44941396e-7" ixz="4.94040904e-8"
@@ -14,10 +16,8 @@
         izz="1.58005147e-5"
         meshfile="package://dhex_description/meshes/camera_new.stl"
         meshscale="1 1 1"
-        parent="CAMERA_HOLDER"
+        parent="base_link"
         origin_rpy_j="0 0 1.5707" origin_xyz_j="0 0.08028694 0.0065"
-        px_width="2592"
-        px_heigth="2048"
         />
 
 

@@ -1,0 +1,22 @@
+topics:
+- name    : external
+  topic   : cmd_vel
+  timeout : 0.5
+  priority: 1
+- name    : move_base_exploration
+  topic   : cmd_vel_exploration
+  timeout : 0.5
+  priority: 2
+- name    : move_base_object_found
+  topic   : cmd_vel_object
+  timeout : 0.5
+  priority: 3
+- name    : adjustment_object_found
+  topic   : cmd_vel_object_adjustment
+  timeout : 0.5
+  priority: 4
+locks:
+- name    : e_stop
+  topic   : e_stop
+  timeout : 0.0
+  priority: 255

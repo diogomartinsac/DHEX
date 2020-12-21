@@ -9,11 +9,11 @@
                        name:=camera
                        topic:=/camera
                        hz:=30
-                       fov:=${M_PI/2.0}
-                       px_width:=1280
-                       px_heigth:=720
+                       fov:=${60.0*M_PI/180.0}
+                       px_width:=640
+                       px_heigth:=480
                        px_format:=R8G8B8
-                       clip_near:=0.02
+                       clip_near:=0.05
                        clip_far:=300
                        noise:=0.008
                        hackbaseline:=0.0
@@ -55,7 +55,6 @@
         <geometry>
           <mesh filename="${meshfile}" scale="${meshscale}"/>
         </geometry>
-        <material name="light_black"/>
       </visual>
     </link>
 
@@ -74,13 +73,6 @@
       <parent link="${name}"/>
       <child link="${name}_optical_frame"/>
     </joint>
-
-
-
-    <gazebo reference="${name}">
-      <material>Gazebo/Red</material>
-    </gazebo>
-
 
     <gazebo reference="${name}">
       <sensor type="camera" name="${name}_sensor">

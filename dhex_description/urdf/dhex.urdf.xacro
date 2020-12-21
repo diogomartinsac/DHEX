@@ -2,6 +2,9 @@
 
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="dhex">
 
+<!-- <xacro:arg name="rp_lidar_a1" default="true"/>
+<xacro:property name="rp_lidar_a1" value="$(arg rp_lidar_a1)" /> -->
+
 <!-- BGN - Include -->
 <xacro:include filename="$(find dhex_description)/urdf/dhex_parameters.xacro" />
 <xacro:include filename="$(find dhex_description)/urdf/links_joints.xacro" />
@@ -112,13 +115,14 @@
         meshfile="package://dhex_description/meshes/caster_wheel.stl"
         meshscale="1 1 1" />
 
+<!-- ATTACHMENTS	 -->
 
-
-
+<xacro:include filename="$(find dhex_description)/urdf/attachments.xacro" />
 
 
 	<gazebo>
 		<!-- <plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so">
+			<robotNamespace>/</robotNamespace>
 		</plugin> -->
 
 		<plugin name="gazebo_ros_control" filename="libgazebo_ros_diff_drive.so">
@@ -131,26 +135,36 @@
 			<rightJoint>${link_00_name}_TO_${link_01_name}</rightJoint>
 			<wheelSeparation>0.1275</wheelSeparation>
 			<wheelDiameter>0.06599749</wheelDiameter>
-			<torque>20</torque>
-			<commandTopic>/dhex/cmd_vel</commandTopic>
-			<odometryTopic>/dhex/odom</odometryTopic>
+			<torque>10</torque>
+			<commandTopic>cmd_vel</commandTopic>
+			<odometryTopic>dhex_velocity_controller/odom</odometryTopic>
 			<odometryFrame>odom</odometryFrame>
-			<publishWheelTF>true</publishWheelTF>
-			<publishOdomTF>true</publishOdomTF>
+			<publishWheelTF>false</publishWheelTF>
+			<publishOdomTF>false</publishOdomTF>
 			<publishWheelJointState>true</publishWheelJointState>
-			<robotBaseFrame>${base_link}</robotBaseFrame>
+			<robotBaseFrame>${link_00_name}</robotBaseFrame>
 		</plugin>
 
-                  <plugin name="p3d_base_controller" filename="libgazebo_ros_p3d.so">
+                <plugin name="imu_plugin" filename="libgazebo_ros_imu.so">
                         <alwaysOn>true</alwaysOn>
-                        <updateRate>50.0</updateRate>
-                        <bodyName>base_link</bodyName>
-                        <topicName>ground_truth/state</topicName>
-                        <gaussianNoise>0.01</gaussianNoise>
-                        <frameName>map</frameName>
-                        <xyzOffset>0 0 0</xyzOffset>
-                        <rpyOffset>0 0 0</rpyOffset>
+                        <bodyName>${link_00_name}</bodyName>
+                        <topicName>imu</topicName>
+                        <serviceName>imu_service</serviceName>
+                        <gaussianNoise>0.0</gaussianNoise>
+                        <updateRate>240.0</updateRate>
                 </plugin>
+
+
+		<plugin name="p3d_base_controller" filename="libgazebo_ros_p3d.so">
+					<alwaysOn>true</alwaysOn>
+					<updateRate>50.0</updateRate>
+					<bodyName>${link_00_name}</bodyName>
+					<topicName>ground_truth/state</topicName>
+					<gaussianNoise>0.01</gaussianNoise>
+					<frameName>map</frameName>
+					<xyzOffset>0 0 0</xyzOffset>
+					<rpyOffset>0 0 0</rpyOffset>
+		</plugin>
 	</gazebo>
 
 </robot>
