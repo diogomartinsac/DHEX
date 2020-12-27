@@ -1,27 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <launch>
-    <group ns="/dhex">
         <!-- Robot model -->
-        <param name="robot_description" command="$(find xacro)/xacro --inorder '$(find dhex_description)/urdf/dhex.urdf.xacro'" />
+        <param name="robot_description" command="$(find xacro)/xacro $(find dhex_description)/urdf/dhex.urdf.xacro" />
         <arg name="x" default="0"/>
         <arg name="y" default="0"/>
         <arg name="z" default="0.1"/>
-        <node name="mybot_spawn" pkg="gazebo_ros" type="spawn_model" output="screen"
+        <node name="mybot_spawn" pkg="gazebo_ros" type="spawn_model" output="screen" respawn="false"
             args="-urdf -param robot_description -model dhex -x $(arg x) -y $(arg y) -z $(arg z)" />
         <!-- Controllers config -->
         <!-- <rosparam command="load" file="$(find dhex_description)/config/joints2.yaml" /> -->
         <!-- Controllers -->
 
         <!-- Robot state publisher -->
-        <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher"
-        respawn="false" output="screen">
-            <!-- <remap from="/joint_states" to="/revel/joint_states" /> -->
+        <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher">
+           
         </node>
-
         <node pkg="tf" type="static_transform_publisher" name="base_wheel" args="0 0 0 0 0 1.5707 /base_link /base_wheel 100" />
 
         <!-- rqt -->
         <!-- <node name="rqt_reconfigure" pkg="rqt_reconfigure" type="rqt_reconfigure" />
         <node name="rqt_publisher" pkg="rqt_publisher" type="rqt_publisher" /> -->
-    </group>
+    
 </launch>
