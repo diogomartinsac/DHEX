@@ -13,10 +13,11 @@
 
  <!-- JOINT - BASE_LINK TO HEX_BASE_LINK -->
 <xacro:m_joint name="${base_link}_TO_${link_00_name}" type="fixed"
+  motor_flag = "false"
   axis_xyz="0 0 1"
   origin_rpy="0 0 0" origin_xyz="0 0 0"
   parent="${base_link}" child="${link_00_name}"
-  limit_e="1000" limit_l="-3.14" limit_u="3.14" limit_v="0.5" />
+  limit_e="100000" limit_l="-100000" limit_u="1000000" limit_v="10"/>
 
 <!-- HEX_BASE_LINK  -->
 <xacro:m_link_mesh name="${link_00_name}"
@@ -32,10 +33,22 @@
 
 <!-- JOINT - HEX_BASE_LINK TO RIGHT_WHEEL -->
 <xacro:m_joint name="${link_00_name}_TO_${link_01_name}" type="continuous"
+  motor_flag = "true"
   axis_xyz="0 0 -1"
   origin_rpy="1.5707 0 0" origin_xyz="0.04739898 -0.06196184 -0.01215966"
   parent="${link_00_name}" child="${link_01_name}"
-  limit_e="1000" limit_l="-3.14" limit_u="3.14" limit_v="0.5" />
+  limit_e="100000" limit_l="-100000" limit_u="1000000" limit_v="10"/>
+<!--TODO: Understand why the macro is not working-->
+<transmission name="trans_${link_00_name}_TO_${link_01_name}">
+  <type>transmission_interface/SimpleTransmission</type>
+  <joint name="${link_00_name}_TO_${link_01_name}">
+    <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+  </joint>
+  <actuator name="motor_${link_00_name}_TO_${link_01_name}">
+    <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+    <mechanicalReduction>1</mechanicalReduction>
+  </actuator>
+</transmission>
 
 <!-- RIGHT_WHEEL  -->
 <xacro:m_link_mesh name="${link_01_name}"
@@ -52,10 +65,22 @@
 
 <!-- JOINT - HEX_BASE_LINK TO LEFT_WHEEL -->
 <xacro:m_joint name="${link_00_name}_TO_${link_02_name}" type="continuous"
+  motor_flag = "true"
   axis_xyz="0 0 1"
   origin_rpy="-1.5707 0 0" origin_xyz="0.04739898 0.06196184 -0.01215966"
   parent="${link_00_name}" child="${link_02_name}"
-  limit_e="1000" limit_l="-3.14" limit_u="3.14" limit_v="0.5" />
+  limit_e="100000" limit_l="-100000" limit_u="1000000" limit_v="10"/>
+<!--TODO: Understand why the macro is not working-->
+<transmission name="trans_${link_00_name}_TO_${link_02_name}">
+  <type>transmission_interface/SimpleTransmission</type>
+  <joint name="${link_00_name}_TO_${link_02_name}">
+    <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+  </joint>
+  <actuator name="motor_${link_00_name}_TO_${link_02_name}">
+    <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+    <mechanicalReduction>1</mechanicalReduction>
+  </actuator>
+</transmission>
 
 <!--LEFT_WHEEL-->
 <xacro:m_link_mesh name="${link_02_name}"
@@ -71,10 +96,11 @@
 
 <!-- JOINT - HEX_BASE_LINK TO CASTER_WHEEL_SUPPORT -->
 <xacro:m_joint name="${link_00_name}_TO_${link_03_name}" type="continuous"
+  motor_flag = "false"
   axis_xyz="0 0 1"
   origin_rpy="0 0 0" origin_xyz="-0.06827047 0.00004137 -0.03548239"
   parent="${link_00_name}" child="${link_03_name}"
-  limit_e="1000" limit_l="-3.14" limit_u="3.14" limit_v="0.5" />
+  limit_e="100000" limit_l="-100000" limit_u="1000000" limit_v="10"/>
 
 <!--CASTER_WHEEL_SUPPORT-->
 <xacro:m_link_mesh name="${link_03_name}"
@@ -90,6 +116,7 @@
 
 <!-- JOINT - HEX_BASE_LINK TO CASTER_WHEEL -->
 <xacro:m_joint name="${link_03_name}_TO_${link_04_name}" type="continuous"
+  motor_flag = "false"
   axis_xyz="0 0 1"
   origin_rpy="0 1.5707 0" origin_xyz="0 -0.0155 0"
   parent="${link_03_name}" child="${link_04_name}"
@@ -106,5 +133,12 @@
   izz="4.200e-7"
   meshfile="package://dhex_description/meshes/caster_wheel.stl"
   meshscale="1 1 1" />
+
+  <gazebo>
+    <plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so">
+      <robotNamespace>/dhex</robotNamespace>
+      <!-- <robotSimType>gazebo_ros_control/DefaultRobotHWSim</robotSimType> -->
+    </plugin>
+  </gazebo>
 
 </robot>

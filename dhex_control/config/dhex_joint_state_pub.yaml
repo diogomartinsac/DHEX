@@ -1,0 +1,4 @@
+publish_default_positions: true
+publish_default_velocities: true
+publish_default_efforts: true
+use_gui: false

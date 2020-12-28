@@ -20,8 +20,4 @@
     <!--  Include robot stuff -->
     <include file="$(find dhex_description)/launch/spawn.launch" />
     
-    <!-- MoveIt -->
-    <!-- <include file="$(find dhex_description)/launch/moveit.launch" /> -->
-    <!-- Spawn Box -->
-    <!-- <include file="$(find dhex_description)/launch/spawn_box.launch" /> -->
 </launch>
