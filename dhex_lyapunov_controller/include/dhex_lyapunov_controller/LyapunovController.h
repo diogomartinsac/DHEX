@@ -15,7 +15,7 @@ class LyapunovController
 {
 protected:
   ros::NodeHandle nh_;
-  double distance_tolerance_, angle_tolerance_, kp_;
+  double distance_tolerance_, angle_tolerance_, k1_, k2_;
   actionlib::SimpleActionServer<dhex_lyapunov_controller::LyapunovControllerAction> as_;
   // NodeHandle instance must be created before this line. Otherwise strange error occurs.
   std::string action_name_;
@@ -31,6 +31,8 @@ public:
   ~LyapunovController(void);
 
   double calculateAzimuth();
+  double calculateDistanceFromGoal();
+  double calculateLyapunovOmega();
   double getThetaFromQuat(const geometry_msgs::Quaternion quat_msg);
   bool hasReachedGoal();
   bool start();

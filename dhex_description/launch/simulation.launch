@@ -7,6 +7,8 @@
   <arg name="headless"      default="false"/>
   <arg name="debug"         default="false"/>
   
+  <param name="log4j.logger.ros" type="str" value="DEBUG" />
+
     <!-- Start Gazebo with a blank world -->
     <include file="$(find dhex_gazebo)/launch/gazebo.launch">
         <arg name="debug" value="$(arg debug)" />

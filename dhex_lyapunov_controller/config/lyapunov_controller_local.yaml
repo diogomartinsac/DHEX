@@ -1,5 +1,7 @@
-distance_tolerance: 0.1
-angle_tolerance: 0.2
+distance_tolerance: 0.3
+angle_tolerance: 0.5
+k1: 5
+k2: 100
 pub_topic:
   control: "/dhex/cmd_vel"
 sub_topic:

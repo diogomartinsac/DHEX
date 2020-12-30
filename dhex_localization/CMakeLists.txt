@@ -129,7 +129,8 @@ include_directories(
 )
 
 ## Declare a C++ library
-add_library(dhex_essentials_LIB
+add_library(
+  dhex_essentials_LIB
   src/Odometer.cpp
   src/Tachometer.cpp
 )
