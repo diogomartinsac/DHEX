@@ -1,0 +1,9 @@
+#goal definition
+geometry_msgs/Pose2D goal_pose
+float32 velocity
+---
+#result definition
+bool reached_goal
+---
+#feedback
+geometry_msgs/Pose2D error_pose

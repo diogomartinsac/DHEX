@@ -1,0 +1,6 @@
+<?xml version="1.0"?>
+<launch>
+  <node name="lyapunov_controller" pkg="dhex_lyapunov_controller" type="lyapunov_controller">
+    <rosparam file="$(find dhex_lyapunov_controller)/config/lyapunov_controller_local.yaml" command="load"/> 
+  </node>
+</launch>
